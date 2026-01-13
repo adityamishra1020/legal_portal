@@ -10,7 +10,6 @@ Rails.application.configure do
 
   config.action_controller.perform_caching = true
   config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
-  config.assets.compile = false
 
   # Security headers
   config.action_dispatch.default_headers = {
