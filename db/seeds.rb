@@ -4,7 +4,7 @@ admin.update!(
   name: 'Admin User',
   password: 'admin123',
   role: 'admin',
-  type: 'Admin',
+  type: 'Administrator',
   phone: '+911800000000',
   is_active: true,
   status: 'active'
