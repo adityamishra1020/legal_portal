@@ -5,15 +5,6 @@ Rails.application.configure do
   config.eager_load = true
   config.consider_all_requests_local = false
 
-  # Secure session configuration for production
-  config.session_store :cookie_store, {
-    key: '_justicehub_session',
-    expire_after: 30.days,
-    secure: Rails.env.production?,
-    httponly: true,
-    same_site: :lax
-  }
-
   # Force SSL in production
   config.force_ssl = ENV.fetch('FORCE_SSL', 'true') == 'true'
 
