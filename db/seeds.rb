@@ -41,7 +41,7 @@ staff.update!(
   role: 'staff',
   type: 'Staff',
   phone: '+918888888888',
-  department: 'Complaints',
+  department: 'support',
   access_level: 'standard',
   is_active: true,
   status: 'active'
