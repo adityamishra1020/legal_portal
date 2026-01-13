@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  include Pundit::Authorization
   helper_method :current_user, :logged_in?, :require_login
 
   private

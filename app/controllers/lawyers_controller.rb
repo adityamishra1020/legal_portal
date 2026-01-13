@@ -33,7 +33,6 @@ class LawyersController < ApplicationController
   end
 
   def show
-    authorize @lawyer
   end
 
   private
