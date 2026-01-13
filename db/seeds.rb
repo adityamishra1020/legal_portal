@@ -42,7 +42,7 @@ staff.update!(
   type: 'Staff',
   phone: '+918888888888',
   department: 'support',
-  access_level: 'standard',
+  access_level: 'junior',
   is_active: true,
   status: 'active'
 )
