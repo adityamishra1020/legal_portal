@@ -1,0 +1,82 @@
+<%# Employment complaint specific fields %>
+
+<div class="form-row">
+  <div class="form-group">
+    <%= f.label :employer_name, "Employer/Company Name *", class: "form-label" %>
+    <%= f.text_field :employer_name,
+                      class: "form-control",
+                      placeholder: "Company name",
+                      required: true %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :designation, "Your Designation", class: "form-label" %>
+    <%= f.text_field :designation,
+                      class: "form-control",
+                      placeholder: "Your job title" %>
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <%= f.label :date_of_joining, "Date of Joining", class: "form-label" %>
+    <%= f.date_field :date_of_joining, class: "form-control" %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :date_of_termination, "Date of Termination/Resignation", class: "form-label" %>
+    <%= f.date_field :date_of_termination, class: "form-control" %>
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <%= f.label :salary_amount, "Monthly Salary (₹)", class: "form-label" %>
+    <%= f.number_field :salary_amount,
+                        class: "form-control",
+                        placeholder: "0.00",
+                        min: 0,
+                        step: 0.01 %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :pending_salary_months, "Pending Salary (Months)", class: "form-label" %>
+    <%= f.number_field :pending_salary_months,
+                        class: "form-control",
+                        placeholder: "0",
+                        min: 0 %>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= f.label :nature_of_dispute, "Nature of Dispute *", class: "form-label" %>
+  <%= f.select :nature_of_dispute,
+               options_for_select(EmploymentComplaint.nature_of_disputes.keys.map { |k| [k.titleize, k] }),
+               { prompt: "Select nature of dispute" },
+               class: "form-control",
+               required: true %>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <%= f.label :employer_contact, "Employer Contact", class: "form-label" %>
+    <%= f.telephone_field :employer_contact,
+                          class: "form-control",
+                          placeholder: "+91 XXXXX XXXXX" %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :hr_contact, "HR Contact", class: "form-label" %>
+    <%= f.telephone_field :hr_contact,
+                          class: "form-control",
+                          placeholder: "+91 XXXXX XXXXX" %>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= f.label :employer_address, "Employer Address", class: "form-label" %>
+  <%= f.text_area :employer_address,
+                   class: "form-control",
+                   placeholder: "Company address",
+                   rows: 3 %>
+</div>

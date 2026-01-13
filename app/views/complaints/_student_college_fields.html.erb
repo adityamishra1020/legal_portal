@@ -1,0 +1,92 @@
+<div class="form-row">
+  <div class="form-group">
+    <%= f.label :college_name, "College/University Name *", class: "form-label" %>
+    <%= f.text_field :college_name,
+                      class: "form-control",
+                      placeholder: "College name",
+                      required: true %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :course_name, "Course Name", class: "form-label" %>
+    <%= f.text_field :course_name,
+                      class: "form-control",
+                      placeholder: "e.g., B.Tech, MBA" %>
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <%= f.label :student_name, "Student Name", class: "form-label" %>
+    <%= f.text_field :student_name,
+                      class: "form-control",
+                      placeholder: "Your name" %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :enrollment_number, "Enrollment Number", class: "form-label" %>
+    <%= f.text_field :enrollment_number,
+                      class: "form-control",
+                      placeholder: "Roll/Enrollment number" %>
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <%= f.label :year_of_study, "Year of Study", class: "form-label" %>
+    <%= f.select :year_of_study,
+                 options_for_select(['1st Year', '2nd Year', '3rd Year', '4th Year', 'Final Year']),
+                 { prompt: "Select year" },
+                 class: "form-control" %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :admission_date, "Date of Admission", class: "form-label" %>
+    <%= f.date_field :admission_date, class: "form-control" %>
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <%= f.label :total_fees, "Total Fees (₹)", class: "form-label" %>
+    <%= f.number_field :total_fees,
+                        class: "form-control",
+                        placeholder: "0.00",
+                        min: 0,
+                        step: 0.01 %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :fees_paid, "Fees Paid (₹)", class: "form-label" %>
+    <%= f.number_field :fees_paid,
+                        class: "form-control",
+                        placeholder: "0.00",
+                        min: 0,
+                        step: 0.01 %>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= f.label :nature_of_complaint, "Nature of Complaint *", class: "form-label" %>
+  <%= f.select :nature_of_complaint,
+               options_for_select(StudentCollegeComplaint.nature_of_complaints.keys.map { |k| [k.titleize, k] }),
+               { prompt: "Select nature of complaint" },
+               class: "form-control",
+               required: true %>
+</div>
+
+<div class="form-group">
+  <%= f.label :admission_medium, "Admission Medium", class: "form-label" %>
+  <%= f.select :admission_medium,
+                options_for_select(StudentCollegeComplaint.admission_media.keys.map { |k| [k.titleize, k] }),
+               { prompt: "Select admission medium" },
+               class: "form-control" %>
+</div>
+
+<div class="form-group">
+  <%= f.label :additional_details, "Additional Details", class: "form-label" %>
+  <%= f.text_area :additional_details,
+                   class: "form-control",
+                   placeholder: "Provide any additional relevant information",
+                   rows: 4 %>
+</div>

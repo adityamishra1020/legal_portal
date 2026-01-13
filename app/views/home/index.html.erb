@@ -1,0 +1,350 @@
+<% content_for(:title, "JusticeHub - Consumer Dispute Resolution Portal") %>
+
+<div class="hero">
+  <div class="hero-content">
+    <h1>Justice for Every Consumer</h1>
+    <p>File complaints, track progress, and resolve disputes with ease. Our legal portal connects you with expert lawyers.</p>
+    <div class="hero-buttons">
+      <%= link_to "File a Complaint", new_complaint_path, class: "btn btn-primary btn-large" %>
+      <%= link_to "Browse Lawyers", lawyers_path, class: "btn btn-secondary btn-large" %>
+    </div>
+  </div>
+</div>
+
+<section class="features">
+  <h2>How It Works</h2>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class="fas fa-file-alt"></i>
+      </div>
+      <h3>File Complaint</h3>
+      <p>Select your category and file a detailed complaint with all supporting documents.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class="fas fa-user-tie"></i>
+      </div>
+      <h3>Get a Lawyer</h3>
+      <p>Our platform assigns expert lawyers specialized in your type of dispute.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class="fas fa-chart-line"></i>
+      </div>
+      <h3>Track Progress</h3>
+      <p>Monitor your case status in real-time with our 5-step resolution timeline.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h3>Get Resolution</h3>
+      <p>Receive a fair resolution with legal backing and proper documentation.</p>
+    </div>
+  </div>
+</section>
+
+<section class="complaint-categories">
+  <h2>Complaint Categories</h2>
+  <div class="category-grid">
+    <%= link_to new_complaint_path(category: :employment), class: "category-card" do %>
+      <i class="fas fa-briefcase"></i>
+      <span>Employment</span>
+    <% end %>
+    <%= link_to new_complaint_path(category: :student_coaching), class: "category-card" do %>
+      <i class="fas fa-graduation-cap"></i>
+      <span>Student Coaching</span>
+    <% end %>
+    <%= link_to new_complaint_path(category: :student_college), class: "category-card" do %>
+      <i class="fas fa-university"></i>
+      <span>Student College</span>
+    <% end %>
+    <%= link_to new_complaint_path(category: :consumer), class: "category-card" do %>
+      <i class="fas fa-shopping-cart"></i>
+      <span>Consumer</span>
+    <% end %>
+    <%= link_to new_complaint_path(category: :property), class: "category-card" do %>
+      <i class="fas fa-home"></i>
+      <span>Property</span>
+    <% end %>
+    <%= link_to new_complaint_path(category: :financial), class: "category-card" do %>
+      <i class="fas fa-coins"></i>
+      <span>Financial</span>
+    <% end %>
+    <%= link_to new_complaint_path(category: :matrimonial), class: "category-card" do %>
+      <i class="fas fa-rings-wedding"></i>
+      <span>Matrimonial</span>
+    <% end %>
+    <%= link_to new_complaint_path(category: :rental), class: "category-card" do %>
+      <i class="fas fa-building"></i>
+      <span>Rental</span>
+    <% end %>
+  </div>
+</section>
+
+<section class="stats-section">
+  <h2>Our Impact</h2>
+  <div class="stats-grid">
+    <div class="stat-item">
+      <span class="stat-number"><%= @stats[:total] %></span>
+      <span class="stat-label">Total Complaints</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number"><%= @stats[:pending] %></span>
+      <span class="stat-label">Pending Cases</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number"><%= @stats[:resolved] %></span>
+      <span class="stat-label">Resolved Cases</span>
+    </div>
+  </div>
+</section>
+
+<section class="recent-complaints">
+  <h2>Recent Complaints</h2>
+  <% if @recent_complaints.any? %>
+    <div class="complaint-list">
+      <% @recent_complaints.each do |complaint| %>
+        <div class="complaint-item">
+          <div class="complaint-info">
+            <span class="complaint-type"><%= complaint.complaint_type.titleize %></span>
+            <span class="complaint-subject"><%= complaint.subject %></span>
+          </div>
+          <div class="complaint-status">
+            <span class="status-badge status-<%= complaint.status %>"><%= complaint.status.titleize %></span>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="no-complaints">No complaints filed yet. Be the first to file one!</p>
+  <% end %>
+</section>
+
+<style>
+.hero {
+  background: linear-gradient(135deg, #1a365d 0%, #2d3748 100%);
+  color: white;
+  padding: 80px 24px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.hero p {
+  font-size: 18px;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto 32px;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.features {
+  padding: 80px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.features h2 {
+  text-align: center;
+  font-size: 32px;
+  margin-bottom: 48px;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 32px;
+}
+
+.feature-card {
+  background: #f7fafc;
+  padding: 32px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.feature-icon {
+  width: 64px;
+  height: 64px;
+  background: #4299e1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 24px;
+  color: white;
+}
+
+.feature-card h3 {
+  margin-bottom: 8px;
+}
+
+.complaint-categories {
+  background: #edf2f7;
+  padding: 80px 24px;
+}
+
+.complaint-categories h2 {
+  text-align: center;
+  font-size: 32px;
+  margin-bottom: 48px;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.category-card {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  text-align: center;
+  text-decoration: none;
+  color: #2d3748;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.category-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+.category-card i {
+  font-size: 32px;
+  color: #4299e1;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.category-card span {
+  font-weight: 500;
+}
+
+.stats-section {
+  padding: 80px 24px;
+  background: #1a365d;
+  color: white;
+  text-align: center;
+}
+
+.stats-section h2 {
+  margin-bottom: 48px;
+  font-size: 32px;
+}
+
+.stats-grid {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 16px;
+  opacity: 0.8;
+}
+
+.recent-complaints {
+  padding: 80px 24px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.recent-complaints h2 {
+  text-align: center;
+  font-size: 32px;
+  margin-bottom: 32px;
+}
+
+.complaint-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.complaint-item {
+  background: #f7fafc;
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.complaint-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.complaint-type {
+  font-size: 12px;
+  color: #718096;
+  text-transform: uppercase;
+}
+
+.complaint-subject {
+  font-weight: 500;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-submitted { background: #bee3f8; color: #2b6cb0; }
+.status-under_review { background: #fefcbf; color: #975a16; }
+.status-lawyer_assigned { background: #c6f6d5; color: #276749; }
+.status-in_progress { background: #e9d8fd; color: #6b46c1; }
+.status-resolved { background: #9ae6b4; color: #22543d; }
+.status-closed { background: #cbd5e0; color: #4a5568; }
+
+.no-complaints {
+  text-align: center;
+  color: #718096;
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 32px;
+  }
+  
+  .hero-buttons {
+    flex-direction: column;
+  }
+  
+  .stats-grid {
+    gap: 40px;
+  }
+}
+</style>

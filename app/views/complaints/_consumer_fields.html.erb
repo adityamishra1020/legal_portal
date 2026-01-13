@@ -1,0 +1,125 @@
+<%# Consumer complaint specific fields %>
+
+<div class="form-row">
+  <div class="form-group">
+    <%= f.label :product_name, "Product Name *", class: "form-label" %>
+    <%= f.text_field :product_name,
+                      class: "form-control",
+                      placeholder: "Product name",
+                      required: true %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :product_brand, "Brand/Manufacturer", class: "form-label" %>
+    <%= f.text_field :product_brand,
+                      class: "form-control",
+                      placeholder: "Brand name" %>
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <%= f.label :purchase_date, "Purchase Date *", class: "form-label" %>
+    <%= f.date_field :purchase_date, class: "form-control", required: true %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :product_price, "Product Price (₹) *", class: "form-label" %>
+    <%= f.number_field :product_price,
+                        class: "form-control",
+                        placeholder: "0.00",
+                        min: 0,
+                        step: 0.01,
+                        required: true %>
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <%= f.label :purchase_place, "Place of Purchase", class: "form-label" %>
+    <%= f.text_field :purchase_place,
+                      class: "form-control",
+                      placeholder: "Store/Platform name" %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :order_number, "Order/Invoice Number", class: "form-label" %>
+    <%= f.text_field :order_number,
+                      class: "form-control",
+                      placeholder: "Order ID" %>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= f.label :nature_of_defect, "Nature of Defect/Issue *", class: "form-label" %>
+  <%= f.select :nature_of_defect,
+               options_for_select(ConsumerComplaint.nature_of_defects.keys.map { |k| [k.titleize, k] }),
+               { prompt: "Select nature of defect" },
+               class: "form-control",
+               required: true %>
+</div>
+
+<div class="form-group">
+  <%= f.label :defect_description, "Describe the Defect/Issue *", class: "form-label" %>
+  <%= f.text_area :defect_description,
+                   class: "form-control",
+                   placeholder: "Describe the issue in detail...",
+                   rows: 4,
+                   required: true %>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <%= f.label :warranty_period, "Warranty Period", class: "form-label" %>
+    <%= f.text_field :warranty_period,
+                      class: "form-control",
+                      placeholder: "e.g., 1 year" %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :seller_name, "Seller Name", class: "form-label" %>
+    <%= f.text_field :seller_name,
+                      class: "form-control",
+                      placeholder: "Seller/Store name" %>
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="form-label">Action Requested</label>
+  <div class="checkbox-group">
+    <label class="checkbox-label">
+      <%= f.check_box :replacement_requested %>
+      <span>Replacement</span>
+    </label>
+    <label class="checkbox-label">
+      <%= f.check_box :refund_requested %>
+      <span>Refund</span>
+    </label>
+    <label class="checkbox-label">
+      <%= f.check_box :repair_requested %>
+      <span>Repair</span>
+    </label>
+  </div>
+</div>
+
+<style>
+.checkbox-group {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: normal;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+</style>

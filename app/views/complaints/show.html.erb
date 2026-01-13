@@ -1,0 +1,403 @@
+<% content_for(:title, "Complaint ##{@complaint.id} - JusticeHub") %>
+
+<div class="complaint-status-page">
+  <div class="complaint-status-header">
+    <h1>Complaint Details</h1>
+    <p>Track your complaint progress and updates</p>
+  </div>
+
+  <div class="complaint-status-card">
+    <div class="complaint-id">
+      <span class="complaint-id-label">Complaint ID</span>
+      <span class="complaint-id-value">#JH-<%= @complaint.id.to_s.rjust(6, '0') %></span>
+    </div>
+
+    <div class="complaint-meta">
+      <div class="meta-item">
+        <span class="meta-label">Type</span>
+        <span class="meta-value"><%= @complaint.complaint_type.titleize %></span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Filed On</span>
+        <span class="meta-value"><%= @complaint.created_at.strftime('%B %d, %Y') %></span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Status</span>
+        <span class="status-badge status-<%= @complaint.status %>"><%= @complaint.status.titleize %></span>
+      </div>
+    </div>
+
+    <div class="complaint-subject">
+      <h2><%= @complaint.subject %></h2>
+    </div>
+
+    <div class="complaint-description">
+      <h3>Description</h3>
+      <p><%= @complaint.description %></p>
+    </div>
+
+    <% if @type_specific %>
+      <div class="complaint-type-details">
+        <h3><%= @type_info[:name] %> Specific Details</h3>
+        <div class="type-details-grid">
+          <% @type_specific.attributes.each do |key, value| %>
+            <% next if key.in?(['id', 'complaint_id', 'created_at', 'updated_at']) || value.blank? %>
+            <div class="type-detail-item">
+              <span class="detail-label"><%= key.titleize %></span>
+              <span class="detail-value">
+                <% case value %>
+                <% when Date %>
+                  <%= value.strftime('%B %d, %Y') %>
+                <% when TrueClass %>
+                  Yes
+                <% when FalseClass %>
+                  No
+                <% else %>
+                  <%= value %>
+                <% end %>
+              </span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Status Timeline -->
+    <div class="status-timeline">
+      <h3>Complaint Timeline</h3>
+      <div class="timeline">
+        <div class="timeline-step <%= 'completed' if @complaint.submitted? || @complaint.under_review? || @complaint.lawyer_assigned? || @complaint.in_progress? || @complaint.resolved? %>">
+          <div class="step-marker">
+            <i class="fas fa-check"></i>
+          </div>
+          <div class="step-content">
+            <h4>Complaint Submitted</h4>
+            <p><%= @complaint.created_at.strftime('%B %d, %Y at %I:%M %p') %></p>
+          </div>
+        </div>
+
+        <div class="timeline-step <%= 'completed' if @complaint.under_review? || @complaint.lawyer_assigned? || @complaint.in_progress? || @complaint.resolved? %> <%= 'active' if @complaint.under_review? %>">
+          <div class="step-marker">
+            <i class="fas fa-search"></i>
+          </div>
+          <div class="step-content">
+            <h4>Under Review</h4>
+            <p>Your complaint is being reviewed by our team</p>
+          </div>
+        </div>
+
+        <div class="timeline-step <%= 'completed' if @complaint.lawyer_assigned? || @complaint.in_progress? || @complaint.resolved? %> <%= 'active' if @complaint.lawyer_assigned? %>">
+          <div class="step-marker">
+            <i class="fas fa-user-tie"></i>
+          </div>
+          <div class="step-content">
+            <h4>Lawyer Assigned</h4>
+            <p>A legal expert has been assigned to your case</p>
+          </div>
+        </div>
+
+        <div class="timeline-step <%= 'completed' if @complaint.resolved? %> <%= 'active' if @complaint.in_progress? %>">
+          <div class="step-marker">
+            <i class="fas fa-gavel"></i>
+          </div>
+          <div class="step-content">
+            <h4>In Progress</h4>
+            <p>Legal proceedings are underway</p>
+          </div>
+        </div>
+
+        <div class="timeline-step <%= 'active' if @complaint.resolved? %>">
+          <div class="step-marker">
+            <i class="fas fa-trophy"></i>
+          </div>
+          <div class="step-content">
+            <h4>Resolved</h4>
+            <p>Your case has been resolved</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="complaint-actions">
+      <% if @complaint.editable? %>
+        <%= link_to "Edit Complaint", edit_complaint_path(@complaint), class: "btn btn-secondary" %>
+      <% end %>
+      <button class="btn btn-primary" onclick="window.print()">
+        <i class="fas fa-print"></i>
+        Print Complaint
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+.complaint-status-page {
+  padding: 120px 24px 80px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.complaint-status-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.complaint-status-header h1 {
+  font-size: 36px;
+  margin-bottom: 12px;
+}
+
+.complaint-status-header p {
+  color: var(--text-light);
+  font-size: 17px;
+}
+
+.complaint-status-card {
+  background: var(--bg-light);
+  padding: 40px;
+  border-radius: var(--radius-lg);
+}
+
+.complaint-id {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.complaint-id-label {
+  font-size: 14px;
+  color: var(--text-light);
+}
+
+.complaint-id-value {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.complaint-meta {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.meta-label {
+  font-size: 13px;
+  color: var(--text-light);
+}
+
+.meta-value {
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.status-submitted {
+  background: rgba(66, 153, 225, 0.15);
+  color: #2b6cb0;
+}
+
+.status-under_review {
+  background: rgba(237, 137, 54, 0.15);
+  color: #c05621;
+}
+
+.status-lawyer_assigned {
+  background: rgba(128, 90, 213, 0.15);
+  color: #6b46c1;
+}
+
+.status-in_progress {
+  background: rgba(66, 153, 225, 0.2);
+  color: #2c5282;
+}
+
+.status-resolved {
+  background: rgba(56, 161, 105, 0.15);
+  color: #276749;
+}
+
+.status-closed {
+  background: rgba(113, 128, 150, 0.15);
+  color: #4a5568;
+}
+
+.complaint-subject {
+  margin-bottom: 24px;
+}
+
+.complaint-subject h2 {
+  font-size: 24px;
+  margin-bottom: 0;
+}
+
+.complaint-description {
+  margin-bottom: 30px;
+}
+
+.complaint-description h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: var(--text-dark);
+}
+
+.complaint-description p {
+  color: var(--text-medium);
+  line-height: 1.7;
+}
+
+.complaint-type-details {
+  margin-bottom: 30px;
+  padding: 24px;
+  background: var(--bg-white);
+  border-radius: var(--radius-md);
+}
+
+.complaint-type-details h3 {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.type-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.type-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detail-label {
+  font-size: 12px;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detail-value {
+  font-size: 14px;
+  color: var(--text-dark);
+  font-weight: 500;
+}
+
+.status-timeline {
+  padding-top: 30px;
+  border-top: 1px solid var(--border-color);
+}
+
+.status-timeline h3 {
+  font-size: 18px;
+  margin-bottom: 24px;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.timeline-step {
+  display: flex;
+  gap: 20px;
+  position: relative;
+  padding-bottom: 30px;
+}
+
+.timeline-step:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 15px;
+  top: 32px;
+  width: 2px;
+  height: calc(100% - 32px);
+  background: var(--border-color);
+}
+
+.timeline-step.completed::before {
+  background: var(--success-color);
+}
+
+.timeline-step.active::before {
+  background: linear-gradient(to bottom, var(--primary-color) 50%, var(--border-color) 50%);
+}
+
+.step-marker {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.timeline-step.completed .step-marker {
+  background: var(--success-color);
+  color: var(--white);
+}
+
+.timeline-step.active .step-marker {
+  background: var(--primary-color);
+  color: var(--white);
+  animation: pulse 2s infinite;
+}
+
+.step-marker i {
+  font-size: 14px;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(66, 153, 225, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(66, 153, 225, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(66, 153, 225, 0); }
+}
+
+.step-content h4 {
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.step-content p {
+  font-size: 13px;
+  color: var(--text-light);
+}
+
+.complaint-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 1px solid var(--border-color);
+}
+
+@media (max-width: 768px) {
+  .complaint-meta {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+</style>

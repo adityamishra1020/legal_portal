@@ -1,0 +1,91 @@
+<div class="form-row">
+  <div class="form-group">
+    <%= f.label :institution_name, "Bank/Financial Institution Name *", class: "form-label" %>
+    <%= f.text_field :institution_name,
+                      class: "form-control",
+                      placeholder: "Bank name",
+                      required: true %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :institution_type, "Institution Type", class: "form-label" %>
+    <%= f.select :financial_institution_type,
+                 options_for_select(FinancialComplaint.financial_institution_types.keys.map { |k| [k.titleize, k] }),
+                 { prompt: "Select type" },
+                 class: "form-control" %>
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <%= f.label :institution_branch, "Branch Name", class: "form-label" %>
+    <%= f.text_field :institution_branch,
+                      class: "form-control",
+                      placeholder: "Branch name" %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :account_number, "Account Number", class: "form-label" %>
+    <%= f.text_field :account_number,
+                      class: "form-control",
+                      placeholder: "Your account number" %>
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <%= f.label :amount_involved, "Amount Involved (₹)", class: "form-label" %>
+    <%= f.number_field :amount_involved,
+                        class: "form-control",
+                        placeholder: "0.00",
+                        min: 0,
+                        step: 0.01 %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :incident_date, "Date of Incident", class: "form-label" %>
+    <%= f.date_field :incident_date, class: "form-control" %>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= f.label :nature_of_complaint, "Nature of Complaint *", class: "form-label" %>
+  <%= f.select :nature_of_complaint,
+               options_for_select(FinancialComplaint.nature_of_complaints.keys.map { |k| [k.titleize, k] }),
+               { prompt: "Select nature of complaint" },
+               class: "form-control",
+               required: true %>
+</div>
+
+<div class="form-group">
+  <%= f.label :transaction_reference, "Transaction Reference/ID", class: "form-label" %>
+  <%= f.text_field :transaction_reference,
+                    class: "form-control",
+                    placeholder: "Transaction ID if applicable" %>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <%= f.label :police_complaint_filed, "Police Complaint Filed?", class: "form-label" %>
+    <%= f.select :police_complaint_filed,
+                 options_for_select([['No', false], ['Yes', true]]),
+                 {},
+                 class: "form-control" %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :regulator_complaint_filed, "Regulator Complaint Filed?", class: "form-label" %>
+    <%= f.select :regulator_complaint_filed,
+                 options_for_select([['No', false], ['Yes', true]]),
+                 {},
+                 class: "form-control" %>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= f.label :additional_details, "Additional Details", class: "form-label" %>
+  <%= f.text_area :additional_details,
+                   class: "form-control",
+                   placeholder: "Describe the issue in detail",
+                   rows: 4 %>
+</div>
