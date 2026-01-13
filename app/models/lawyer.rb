@@ -101,4 +101,8 @@ class Lawyer < User
     filled = fields.count { |f| send(f).present? }
     (filled.to_f / fields.count * 100).round
   end
+
+  def reviews_count
+    0
+  end
 end

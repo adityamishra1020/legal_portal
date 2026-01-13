@@ -9,7 +9,9 @@ Rails.application.configure do
   config.force_ssl = ENV.fetch('FORCE_SSL', 'true') == 'true'
 
   config.action_controller.perform_caching = true
-  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
+  config.public_file_server.enabled = true
+  config.assets.compile = true
+  config.assets.digest = true
 
   # Security headers
   config.action_dispatch.default_headers = {
