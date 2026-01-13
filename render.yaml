@@ -12,7 +12,7 @@ services:
     env: ruby
     plan: free
     buildCommand: "./bin/render-build.sh"
-    startCommand: "bundle exec rails server -p $PORT"
+    startCommand: "bundle exec rails server -p ${PORT:-10000}"
     envVars:
       - key: RAILS_MASTER_KEY
         fromDatabase:
