@@ -1,0 +1,329 @@
+<% content_for(:title, "Manage Complaints - Admin - JusticeHub") %>
+
+<div class="admin-page">
+  <div class="admin-header">
+    <h1>Manage Complaints</h1>
+    <p>View and manage all complaints</p>
+  </div>
+
+  <div class="filter-bar">
+    <%= form_with url: admin_complaints_path, method: :get, local: true do |form| %>
+      <div class="filter-group">
+        <%= form.select :status, options_for_select(Complaint.statuses.keys, params[:status]), { include_blank: "All Status" }, class: "filter-select" %>
+        <%= form.select :type, options_for_select(Complaint.complaint_types.keys, params[:type]), { include_blank: "All Types" }, class: "filter-select" %>
+        <%= form.text_field :from_date, placeholder: "From Date", class: "filter-input", type: "date" %>
+        <%= form.text_field :to_date, placeholder: "To Date", class: "filter-input", type: "date" %>
+        <%= form.submit "Filter", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="complaints-list">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>User</th>
+          <th>Type</th>
+          <th>Subject</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @complaints.each do |complaint| %>
+          <tr>
+            <td><strong>#<%= complaint.id %></strong></td>
+            <td>
+              <div class="user-cell">
+                <span class="user-name"><%= complaint.user_name %></span>
+                <span class="user-email"><%= complaint.user_email %></span>
+              </div>
+            </td>
+            <td><span class="type-badge"><%= complaint.complaint_type.titleize %></span></td>
+            <td><%= complaint.subject.truncate(50) %></td>
+            <td><%= complaint.amount > 0 ? "₹#{complaint.amount}" : "-" %></td>
+            <td>
+              <span class="status-badge status-<%= complaint.status %>"><%= complaint.status.titleize %></span>
+            </td>
+            <td><%= complaint.created_at.strftime("%d %b %Y") %></td>
+            <td>
+              <div class="action-buttons">
+                <%= link_to "View", complaint_path(complaint), class: "btn-action" %>
+                <%= link_to "Edit", edit_complaint_path(complaint), class: "btn-action" %>
+                <% if complaint.editable? %>
+                  <%= link_to "Update Status", "#", class: "btn-action btn-update", data: { id: complaint.id, current: complaint.status } %>
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Status Update Modal -->
+<div id="statusModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Update Complaint Status</h3>
+      <span class="close">&times;</span>
+    </div>
+    <%= form_with url: admin_update_complaint_status_path(0), method: :patch, local: true do |form| %>
+      <input type="hidden" name="id" id="complaintId">
+      <div class="form-group">
+        <%= form.label :status, "New Status", class: "form-label" %>
+        <%= form.select :status, options_for_select(Complaint.statuses.keys), {}, class: "form-control" %>
+      </div>
+      <div class="modal-actions">
+        <%= form.submit "Update Status", class: "btn btn-primary" %>
+        <button type="button" class="btn btn-secondary modal-cancel">Cancel</button>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<style>
+.admin-page {
+  padding: 100px 24px 60px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.admin-header {
+  margin-bottom: 24px;
+}
+
+.admin-header h1 {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.admin-header p {
+  color: #718096;
+}
+
+.filter-bar {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.filter-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-select,
+.filter-input {
+  padding: 10px 14px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  min-width: 150px;
+}
+
+.filter-input {
+  min-width: 160px;
+}
+
+.complaints-list {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  overflow-x: auto;
+}
+
+.complaints-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.complaints-list th,
+.complaints-list td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.complaints-list th {
+  background: #f7fafc;
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.user-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: 500;
+}
+
+.user-email {
+  font-size: 12px;
+  color: #718096;
+}
+
+.type-badge {
+  background: #e2e8f0;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-submitted { background: #bee3f8; color: #2b6cb0; }
+.status-under_review { background: #fefcbf; color: #975a16; }
+.status-lawyer_assigned { background: #c6f6d5; color: #276749; }
+.status-in_progress { background: #e9d8fd; color: #6b46c1; }
+.status-resolved { background: #9ae6b4; color: #22543d; }
+.status-closed { background: #cbd5e0; color: #4a5568; }
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-action {
+  padding: 6px 12px;
+  background: #4299e1;
+  color: white;
+  border-radius: 4px;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.btn-action:hover {
+  background: #3182ce;
+}
+
+.btn-update {
+  background: #48bb78;
+}
+
+.btn-update:hover {
+  background: #38a169;
+}
+
+.pagination {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 2000;
+}
+
+.modal-content {
+  background: white;
+  margin: 15% auto;
+  padding: 24px;
+  border-radius: 12px;
+  width: 400px;
+  max-width: 90%;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-header h3 {
+  margin: 0;
+}
+
+.close {
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary {
+  background: #4299e1;
+  color: white;
+}
+
+.btn-secondary {
+  background: #e2e8f0;
+  color: #4a5568;
+}
+</style>
+
+<script>
+document.querySelectorAll('.btn-update').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('complaintId').value = this.dataset.id;
+    document.getElementById('statusModal').style.display = 'block';
+  });
+});
+
+document.querySelectorAll('.close, .modal-cancel').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.getElementById('statusModal').style.display = 'none';
+  });
+});
+
+window.addEventListener('click', function(e) {
+  if (e.target == document.getElementById('statusModal')) {
+    document.getElementById('statusModal').style.display = 'none';
+  }
+});
+</script>

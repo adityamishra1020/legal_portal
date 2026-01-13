@@ -1,0 +1,100 @@
+<div class="form-row">
+  <div class="form-group">
+    <%= f.label :respondent_name, "Respondent Name (Spouse) *", class: "form-label" %>
+    <%= f.text_field :respondent_name,
+                      class: "form-control",
+                      placeholder: "Spouse name",
+                      required: true %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :marriage_type, "Type of Marriage", class: "form-label" %>
+    <%= f.select :marriage_type,
+                 options_for_select(MatrimonialComplaint.marriage_types.keys.map { |k| [k.titleize, k] }),
+                 { prompt: "Select type" },
+                 class: "form-control" %>
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <%= f.label :marriage_date, "Date of Marriage *", class: "form-label" %>
+    <%= f.date_field :marriage_date, class: "form-control", required: true %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :marriage_place, "Place of Marriage", class: "form-label" %>
+    <%= f.text_field :marriage_place,
+                      class: "form-control",
+                      placeholder: "City, State" %>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= f.label :petitioner_name, "Your Name", class: "form-label" %>
+  <%= f.text_field :petitioner_name,
+                    class: "form-control",
+                    placeholder: "Your full name" %>
+</div>
+
+<div class="form-group">
+  <%= f.label :nature_of_complaint, "Nature of Complaint *", class: "form-label" %>
+  <%= f.select :nature_of_complaint,
+               options_for_select(MatrimonialComplaint.nature_of_complaints.keys.map { |k| [k.titleize, k] }),
+               { prompt: "Select nature of complaint" },
+               class: "form-control",
+               required: true %>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <%= f.label :children_count, "Number of Children", class: "form-label" %>
+    <%= f.number_field :children_count,
+                        class: "form-control",
+                        placeholder: "0",
+                        min: 0 %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :maintenance_claimed, "Maintenance Claimed?", class: "form-label" %>
+    <%= f.select :maintenance_claimed,
+                 options_for_select([['No', false], ['Yes', true]]),
+                 {},
+                 class: "form-control" %>
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <%= f.label :maintenance_amount, "Maintenance Amount Claimed (₹)", class: "form-label" %>
+    <%= f.number_field :maintenance_amount,
+                        class: "form-control",
+                        placeholder: "0.00",
+                        min: 0,
+                        step: 0.01 %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :custody_needed, "Child Custody Needed?", class: "form-label" %>
+    <%= f.select :custody_needed,
+                 options_for_select([['No', false], ['Yes', true]]),
+                 {},
+                 class: "form-control" %>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= f.label :stridhan_claimed, "Stridhan Recoverable?", class: "form-label" %>
+  <%= f.select :stridhan_claimed,
+               options_for_select([['No', false], ['Yes', true]]),
+               {},
+               class: "form-control" %>
+</div>
+
+<div class="form-group">
+  <%= f.label :additional_details, "Additional Details", class: "form-label" %>
+  <%= f.text_area :additional_details,
+                   class: "form-control",
+                   placeholder: "Provide details of the incident(s) with dates if possible",
+                   rows: 4 %>
+</div>

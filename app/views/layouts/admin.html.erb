@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Admin Panel - JusticeHub" %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="JusticeHub Admin Panel">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/assets/application.css">
+    <script src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@7.0.0/dist/turbo.min.js" defer></script>
+  </head>
+  <body class="admin-layout">
+    <nav class="admin-navbar">
+      <div class="admin-nav-container">
+        <%= link_to root_path, class: "admin-logo" do %>
+          <i class="fas fa-scale-balanced"></i>
+          <span>JusticeHub Admin</span>
+        <% end %>
+
+        <div class="admin-nav-links">
+          <%= link_to "Dashboard", admin_dashboard_path, class: "nav-link #{'active' if current_page?(admin_dashboard_path)}" %>
+          <%= link_to "Complaints", admin_complaints_path, class: "nav-link #{'active' if controller_path.include?('complaints')}" %>
+          <%= link_to "Users", admin_users_path, class: "nav-link #{'active' if controller_path.include?('users')}" %>
+          <%= link_to "Analytics", admin_analytics_path, class: "nav-link #{'active' if current_page?(admin_analytics_path)}" %>
+        </div>
+
+        <div class="admin-nav-actions">
+          <%= link_to "← Back to Site", root_path, class: "nav-link back-link" %>
+          <span class="user-badge"><i class="fas fa-user-shield"></i> <%= current_user.name.titleize %> (<%= current_user.role.titleize %>)</span>
+          <%= link_to logout_path, method: :delete, class: "btn-logout" do %>
+            <i class="fas fa-sign-out-alt"></i> Logout
+          <% end %>
+        </div>
+      </div>
+    </nav>
+
+    <main class="admin-main">
+      <% if flash[:notice] %>
+        <div class="alert alert-success"><i class="fas fa-check-circle"></i> <%= flash[:notice] %></div>
+      <% end %>
+      <% if flash[:alert] %>
+        <div class="alert alert-error"><i class="fas fa-exclamation-circle"></i> <%= flash[:alert] %></div>
+      <% end %>
+      <% if flash[:warning] %>
+        <div class="alert alert-warning"><i class="fas fa-exclamation-triangle"></i> <%= flash[:warning] %></div>
+      <% end %>
+
+      <%= yield %>
+    </main>
+
+    <style>
+      .admin-layout { background: #f7fafc; min-height: 100vh; }
+
+      .admin-navbar {
+        background: linear-gradient(135deg, #1a365d 0%, #2d3748 100%);
+        color: white;
+        padding: 0 24px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      }
+
+      .admin-nav-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 70px;
+      }
+
+      .admin-logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 22px;
+        font-weight: 700;
+        color: white;
+        text-decoration: none;
+      }
+
+      .admin-logo i { font-size: 28px; }
+
+      .admin-nav-links { display: flex; gap: 8px; }
+
+      .admin-nav-links .nav-link {
+        color: rgba(255,255,255,0.85);
+        font-weight: 500;
+        text-decoration: none;
+        padding: 10px 18px;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        font-size: 14px;
+      }
+
+      .admin-nav-links .nav-link:hover {
+        color: white;
+        background: rgba(255,255,255,0.1);
+      }
+
+      .admin-nav-links .nav-link.active {
+        color: white;
+        background: rgba(255,255,255,0.15);
+      }
+
+      .admin-nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .back-link {
+        color: rgba(255,255,255,0.7) !important;
+        font-size: 13px !important;
+        padding: 8px 12px !important;
+      }
+
+      .back-link:hover { color: white !important; }
+
+      .user-badge {
+        background: rgba(255,255,255,0.12);
+        padding: 8px 14px;
+        border-radius: 25px;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .btn-logout {
+        background: rgba(229, 62, 62, 0.9);
+        color: white;
+        padding: 10px 18px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s;
+      }
+
+      .btn-logout:hover {
+        background: #e53e3e;
+        transform: translateY(-1px);
+      }
+
+      .admin-main {
+        padding: 100px 24px 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .alert {
+        padding: 16px 20px;
+        border-radius: 10px;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 500;
+      }
+
+      .alert-success {
+        background: #c6f6d5;
+        color: #276749;
+        border: 1px solid #9ae6b4;
+      }
+
+      .alert-error {
+        background: #fed7d7;
+        color: #c53030;
+        border: 1px solid #feb2b2;
+      }
+
+      .alert-warning {
+        background: #fefcbf;
+        color: #975a16;
+        border: 1px solid #f6e05e;
+      }
+
+      @media (max-width: 1024px) {
+        .admin-nav-links { gap: 4px; }
+        .admin-nav-links .nav-link { padding: 8px 12px; font-size: 13px; }
+        .user-badge span { display: none; }
+      }
+
+      @media (max-width: 768px) {
+        .admin-nav-container { flex-wrap: wrap; height: auto; padding: 16px 0; gap: 12px; }
+        .admin-nav-links { order: 3; width: 100%; justify-content: center; flex-wrap: wrap; }
+        .admin-nav-actions { gap: 12px; }
+        .back-link { display: none; }
+      }
+    </style>
+  </body>
+</html>

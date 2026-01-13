@@ -1,0 +1,238 @@
+<% content_for(:title, "#{@lawyer.name} - #{@lawyer.full_specialization} Lawyer - JusticeHub") %>
+
+<div class="lawyer-profile-container">
+  <div class="lawyer-profile-header">
+    <div class="profile-main">
+      <%= image_tag @lawyer.avatar_url, alt: @lawyer.name, class: "profile-avatar" %>
+      <div class="profile-info">
+        <h1><%= @lawyer.name %></h1>
+        <p class="specialization"><%= @lawyer.full_specialization %></p>
+        <div class="rating-badge">
+          <span class="stars"><%= "★" * @lawyer.rating.round %><%= "☆" * (5 - @lawyer.rating.round) %></span>
+          <span class="rating-text"><%= @lawyer.formatted_rating %> (<%= @lawyer.reviews_count || 0 %> reviews)</span>
+        </div>
+        <p class="location"><i class="fas fa-map-marker-alt"></i> <%= @lawyer.location || "Location not specified" %></p>
+      </div>
+    </div>
+    <div class="profile-actions">
+      <div class="fee-card">
+        <p class="fee-label">Consultation Fee</p>
+        <p class="fee-amount"><%= @lawyer.consultation_fee_display %></p>
+      </div>
+      <button class="btn btn-primary btn-large">Consult Now</button>
+    </div>
+  </div>
+
+  <div class="lawyer-profile-content">
+    <div class="profile-section">
+      <h2>About</h2>
+      <p><%= @lawyer.bio || "No bio available" %></p>
+    </div>
+
+    <div class="profile-grid">
+      <div class="profile-section">
+        <h2>Education</h2>
+        <p><%= @lawyer.education || "Not specified" %></p>
+      </div>
+
+      <div class="profile-section">
+        <h2>Experience</h2>
+        <p><%= @lawyer.formatted_experience %></p>
+      </div>
+
+      <div class="profile-section">
+        <h2>Languages</h2>
+        <div class="tags">
+          <% @lawyer.languages_list.each do |lang| %>
+            <span class="tag"><%= lang %></span>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <h2>Bar Council Number</h2>
+        <p><%= @lawyer.bar_council_no || "Not specified" %></p>
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <h2>Practice Areas</h2>
+      <div class="tags">
+        <span class="tag tag-primary"><%= @lawyer.full_specialization %></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.lawyer-profile-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.lawyer-profile-header {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.profile-main {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-info h1 {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.profile-info .specialization {
+  font-size: 18px;
+  color: #667eea;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.rating-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.stars {
+  color: #f6ad55;
+  font-size: 18px;
+}
+
+.rating-text {
+  color: #718096;
+}
+
+.location {
+  color: #718096;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.location i {
+  color: #667eea;
+}
+
+.profile-actions {
+  text-align: right;
+}
+
+.fee-card {
+  background: #f7fafc;
+  padding: 16px 24px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.fee-label {
+  font-size: 12px;
+  color: #718096;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.fee-amount {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.btn-large {
+  padding: 14px 32px;
+  font-size: 16px;
+}
+
+.lawyer-profile-content {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.profile-section {
+  margin-bottom: 32px;
+}
+
+.profile-section:last-child {
+  margin-bottom: 0;
+}
+
+.profile-section h2 {
+  font-size: 18px;
+  color: #2d3748;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.profile-section p {
+  color: #4a5568;
+  line-height: 1.7;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  background: #edf2f7;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  color: #4a5568;
+}
+
+.tag-primary {
+  background: #667eea;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .lawyer-profile-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .profile-main {
+    flex-direction: column;
+  }
+
+  .profile-actions {
+    margin-top: 24px;
+    text-align: center;
+  }
+
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

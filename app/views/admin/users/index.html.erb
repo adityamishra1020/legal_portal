@@ -1,0 +1,351 @@
+<% content_for(:title, "Manage Users - Admin - JusticeHub") %>
+
+<div class="admin-page">
+  <div class="admin-header">
+    <h1>Manage Users</h1>
+    <p>View and manage all registered users</p>
+  </div>
+
+  <div class="filter-bar">
+    <%= form_with url: admin_users_path, method: :get, local: true do |form| %>
+      <div class="filter-group">
+        <%= form.select :role, options_for_select(User.roles.keys, params[:role]), { include_blank: "All Roles" }, class: "filter-select" %>
+        <%= form.select :active, options_for_select([['Active', 'true'], ['Inactive', 'false']], params[:active]), { include_blank: "All Status" }, class: "filter-select" %>
+        <%= form.submit "Filter", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="users-list">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Status</th>
+          <th>Last Login</th>
+          <th>Joined</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td><strong>#<%= user.id %></strong></td>
+            <td>
+              <div class="user-cell">
+                <span class="user-name"><%= user.name.titleize %></span>
+                <% if user.phone.present? %>
+                  <span class="user-phone"><%= user.phone %></span>
+                <% end %>
+              </div>
+            </td>
+            <td><%= user.email %></td>
+            <td>
+              <span class="role-badge <%= user.role %>"><%= user.role.titleize %></span>
+            </td>
+            <td>
+              <span class="status-badge <%= user.is_active ? 'active' : 'inactive' %>">
+                <%= user.is_active ? 'Active' : 'Inactive' %>
+              </span>
+            </td>
+            <td><%= user.last_login_at ? user.last_login_at.strftime("%d %b %Y") : 'Never' %></td>
+            <td><%= user.created_at.strftime("%d %b %Y") %></td>
+            <td>
+              <div class="action-buttons">
+                <% if user.role != 'admin' %>
+                  <%= link_to "Role", "#", class: "btn-action btn-role", data: { id: user.id, current: user.role } %>
+                <% end %>
+                <% if user.id != current_user.id %>
+                  <%= link_to user.is_active ? "Deactivate" : "Activate", admin_toggle_user_status_path(user), method: :patch, class: "btn-action #{user.is_active ? 'btn-warning' : 'btn-success'}" %>
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Role Update Modal -->
+<div id="roleModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Update User Role</h3>
+      <span class="close">&times;</span>
+    </div>
+    <%= form_with url: admin_update_user_role_path(0), method: :patch, local: true do |form| %>
+      <input type="hidden" name="id" id="userId">
+      <div class="form-group">
+        <%= form.label :role, "New Role", class: "form-label" %>
+        <%= form.select :role, options_for_select(User.roles.keys - ['admin']), {}, class: "form-control" %>
+      </div>
+      <div class="modal-actions">
+        <%= form.submit "Update Role", class: "btn btn-primary" %>
+        <button type="button" class="btn btn-secondary modal-cancel">Cancel</button>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<style>
+.admin-page {
+  padding: 0;
+}
+
+.admin-header {
+  margin-bottom: 24px;
+}
+
+.admin-header h1 {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.admin-header p {
+  color: #718096;
+}
+
+.filter-bar {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.filter-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-select,
+.filter-input {
+  padding: 10px 14px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  min-width: 150px;
+}
+
+.users-list {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  overflow-x: auto;
+}
+
+.users-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.users-list th,
+.users-list td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.users-list th {
+  background: #f7fafc;
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.user-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: 500;
+}
+
+.user-phone {
+  font-size: 12px;
+  color: #718096;
+}
+
+.role-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.role-badge.admin { background: #fed7d7; color: #c53030; }
+.role-badge.lawyer { background: #e9d8fd; color: #6b46c1; }
+.role-badge.staff { background: #fefcbf; color: #975a16; }
+.role-badge.user { background: #c6f6d5; color: #276749; }
+
+.status-badge.active {
+  background: #c6f6d5;
+  color: #276749;
+}
+
+.status-badge.inactive {
+  background: #fed7d7;
+  color: #c53030;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-action {
+  padding: 6px 12px;
+  background: #4299e1;
+  color: white;
+  border-radius: 4px;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.btn-action:hover {
+  background: #3182ce;
+}
+
+.btn-role {
+  background: #805ad5;
+}
+
+.btn-role:hover {
+  background: #6b46c1;
+}
+
+.btn-warning {
+  background: #ed8936;
+}
+
+.btn-warning:hover {
+  background: #dd6b20;
+}
+
+.btn-success {
+  background: #48bb78;
+}
+
+.btn-success:hover {
+  background: #38a169;
+}
+
+.pagination {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 2000;
+}
+
+.modal-content {
+  background: white;
+  margin: 15% auto;
+  padding: 24px;
+  border-radius: 12px;
+  width: 400px;
+  max-width: 90%;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-header h3 {
+  margin: 0;
+}
+
+.close {
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary {
+  background: #4299e1;
+  color: white;
+}
+
+.btn-secondary {
+  background: #e2e8f0;
+  color: #4a5568;
+}
+</style>
+
+<script>
+document.querySelectorAll('.btn-role').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('userId').value = this.dataset.id;
+    document.getElementById('roleModal').style.display = 'block';
+  });
+});
+
+document.querySelectorAll('.close, .modal-cancel').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.getElementById('roleModal').style.display = 'none';
+  });
+});
+
+window.addEventListener('click', function(e) {
+  if (e.target == document.getElementById('roleModal')) {
+    document.getElementById('roleModal').style.display = 'none';
+  }
+});
+</script>

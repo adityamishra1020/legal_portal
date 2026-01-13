@@ -1,0 +1,106 @@
+<%# Student coaching complaint specific fields %>
+
+<div class="form-row">
+  <div class="form-group">
+    <%= f.label :institute_name, "Institute/Coaching Name *", class: "form-label" %>
+    <%= f.text_field :institute_name,
+                      class: "form-control",
+                      placeholder: "Institute name",
+                      required: true %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :course_name, "Course Name *", class: "form-label" %>
+    <%= f.text_field :course_name,
+                      class: "form-control",
+                      placeholder: "Course enrolled",
+                      required: true %>
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <%= f.label :enrollment_number, "Enrollment Number", class: "form-label" %>
+    <%= f.text_field :enrollment_number,
+                      class: "form-control",
+                      placeholder: "Enrollment ID" %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :enrollment_date, "Enrollment Date", class: "form-label" %>
+    <%= f.date_field :enrollment_date, class: "form-control" %>
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <%= f.label :total_fees, "Total Fees (₹) *", class: "form-label" %>
+    <%= f.number_field :total_fees,
+                        class: "form-control",
+                        placeholder: "0.00",
+                        min: 0,
+                        step: 0.01,
+                        required: true %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :fees_paid, "Fees Paid (₹)", class: "form-label" %>
+    <%= f.number_field :fees_paid,
+                        class: "form-control",
+                        placeholder: "0.00",
+                        min: 0,
+                        step: 0.01 %>
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <%= f.label :fees_pending, "Fees Pending (₹)", class: "form-label" %>
+    <%= f.number_field :fees_pending,
+                        class: "form-control",
+                        placeholder: "0.00",
+                        min: 0,
+                        step: 0.01 %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :refund_amount, "Refund Amount Claimed (₹)", class: "form-label" %>
+    <%= f.number_field :refund_amount,
+                        class: "form-control",
+                        placeholder: "0.00",
+                        min: 0,
+                        step: 0.01 %>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= f.label :nature_of_complaint, "Nature of Complaint *", class: "form-label" %>
+  <%= f.select :nature_of_complaint,
+               options_for_select(StudentCoachingComplaint.nature_of_complaints.keys.map { |k| [k.titleize, k] }),
+               { prompt: "Select nature of complaint" },
+               class: "form-control",
+               required: true %>
+</div>
+
+<div class="form-group">
+  <%= f.label :admission_medium, "Mode of Admission", class: "form-label" %>
+  <%= f.select :admission_medium,
+               options_for_select(StudentCoachingComplaint.admission_media.keys.map { |k| [k.titleize, k] }),
+               { prompt: "Select mode" },
+               class: "form-control" %>
+</div>
+
+<div class="form-group">
+  <%= f.label :institute_contact, "Institute Contact", class: "form-label" %>
+  <%= f.telephone_field :institute_contact,
+                        class: "form-control",
+                        placeholder: "+91 XXXXX XXXXX" %>
+</div>
+
+<div class="form-group">
+  <%= f.label :institute_address, "Institute Address", class: "form-label" %>
+  <%= f.text_area :institute_address,
+                   class: "form-control",
+                   placeholder: "Institute address",
+                   rows: 3 %>
+</div>

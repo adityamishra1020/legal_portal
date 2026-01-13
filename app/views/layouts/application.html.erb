@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "JusticeHub - Consumer Dispute Resolution Portal" %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="File consumer complaints, track progress, and resolve disputes with expert lawyers.">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/assets/application.css">
+    <script src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@7.0.0/dist/turbo.min.js" defer></script>
+  </head>
+
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <%= link_to root_path, class: "nav-logo" do %>
+          <i class="fas fa-scale-balanced"></i>
+          <span>JusticeHub</span>
+        <% end %>
+
+        <div class="nav-links">
+          <%= link_to "Home", root_path, class: "nav-link" %>
+          <%= link_to "File Complaint", new_complaint_path, class: "nav-link" %>
+          <%= link_to "Browse Lawyers", lawyers_path, class: "nav-link" %>
+          <% if logged_in? %>
+            <%= link_to "My Complaints", my_complaints_complaints_path, class: "nav-link" %>
+            <% if current_user.can_access_admin? %>
+              <%= link_to "Admin Panel", admin_dashboard_path, class: "nav-link" %>
+            <% end %>
+          <% end %>
+        </div>
+
+        <div class="nav-actions">
+          <% if logged_in? %>
+            <div class="user-menu">
+              <span class="user-name"><%= current_user.name %></span>
+              <%= link_to "Profile", user_path(current_user), class: "nav-link" %>
+              <%= link_to "Logout", logout_path, method: :delete, class: "nav-link" %>
+            </div>
+          <% else %>
+            <%= link_to "Login", login_path, class: "nav-link" %>
+            <%= link_to "Sign Up", signup_path, class: "btn btn-primary" %>
+          <% end %>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <%= yield %>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>JusticeHub</h4>
+          <p>Consumer Dispute Resolution Portal for India</p>
+        </div>
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <%= link_to "File Complaint", new_complaint_path %><br>
+          <%= link_to "Browse Lawyers", lawyers_path %><br>
+          <%= link_to "Track Complaint", "#" %>
+        </div>
+        <div class="footer-section">
+          <h4>Legal</h4>
+          <%= link_to "Terms of Service", "#" %><br>
+          <%= link_to "Privacy Policy", "#" %><br>
+          <%= link_to "Disclaimer", "#" %>
+        </div>
+        <div class="footer-section">
+          <h4>Contact</h4>
+          <p><i class="fas fa-envelope"></i> support@justicehub.in</p>
+          <p><i class="fas fa-phone"></i> 1800-XXX-XXXX</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 JusticeHub. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <style>
+      .navbar {
+        background: white;
+        box-shadow: var(--shadow-sm);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+      }
+
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 16px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--primary-color);
+      }
+
+      .nav-logo:hover {
+        color: #3182ce;
+      }
+
+      .nav-logo i {
+        font-size: 28px;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 32px;
+      }
+
+      .nav-link {
+        color: var(--text-medium);
+        font-weight: 500;
+        transition: var(--transition);
+      }
+
+      .nav-link:hover {
+        color: var(--primary-color);
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      main {
+        padding-top: 80px;
+        min-height: calc(100vh - 300px);
+      }
+
+      .footer {
+        background: var(--text-dark);
+        color: white;
+        padding: 60px 24px 24px;
+        margin-top: 80px;
+      }
+
+      .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 40px;
+      }
+
+      .footer-section h4 {
+        margin-bottom: 16px;
+        font-size: 18px;
+      }
+
+      .footer-section p,
+      .footer-section a {
+        color: #a0aec0;
+        margin-bottom: 8px;
+        display: block;
+      }
+
+      .footer-section a:hover {
+        color: white;
+      }
+
+      .footer-bottom {
+        max-width: 1200px;
+        margin: 40px auto 0;
+        padding-top: 24px;
+        border-top: 1px solid #4a5568;
+        text-align: center;
+        color: #718096;
+      }
+
+      @media (max-width: 768px) {
+        .nav-links {
+          display: none;
+        }
+
+        .nav-actions {
+          display: none;
+        }
+      }
+    </style>
+  </body>
+</html>

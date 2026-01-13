@@ -1,0 +1,144 @@
+<% content_for(:title, "Edit Profile - JusticeHub") %>
+
+<div class="profile-page">
+  <div class="profile-header">
+    <h1>Edit Profile</h1>
+  </div>
+
+  <div class="profile-content">
+    <div class="profile-card">
+      <%= form_with model: @user, local: true do |form| %>
+        <% if @user.errors.any? %>
+          <div class="alert alert-error">
+            <%= @user.errors.full_messages.join(", ") %>
+          </div>
+        <% end %>
+
+        <div class="form-group">
+          <%= form.label :name, "Full Name", class: "form-label" %>
+          <%= form.text_field :name, class: "form-control", required: true %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :email, "Email Address", class: "form-label" %>
+          <%= form.email_field :email, class: "form-control", required: true %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :phone, "Phone Number", class: "form-label" %>
+          <%= form.telephone_field :phone, class: "form-control", placeholder: "+91 XXXXX XXXXX" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :address, "Address", class: "form-label" %>
+          <%= form.text_area :address, class: "form-control", rows: 3 %>
+        </div>
+
+        <div class="form-actions">
+          <%= form.submit "Save Changes", class: "btn btn-primary" %>
+          <%= link_to "Cancel", @user, class: "btn btn-secondary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<style>
+.profile-page {
+  padding: 100px 24px 60px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.profile-header {
+  margin-bottom: 32px;
+}
+
+.profile-header h1 {
+  font-size: 32px;
+}
+
+.profile-card {
+  background: white;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a5568;
+  margin-bottom: 8px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.2s;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+}
+
+.alert {
+  padding: 14px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.alert-error {
+  background: #fff5f5;
+  color: #c53030;
+  border: 1px solid #feb2b2;
+}
+
+.form-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-weight: 500;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #4299e1, #3182ce);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(66, 153, 225, 0.4);
+}
+
+.btn-secondary {
+  background: #e2e8f0;
+  color: #4a5568;
+}
+
+.btn-secondary:hover {
+  background: #cbd5e0;
+}
+</style>
