@@ -9,7 +9,7 @@ gem "bootsnap", require: false
 gem "importmap-rails"
 gem "turbo-rails"
 gem "stimulus-rails"
-gem "bcrypt", "~> 3.1.7"
+gem "bcrypt", "~> 3.1.22"
 gem "will_paginate", "~> 4.0"
 gem "sprockets-rails"
 gem "pundit"
