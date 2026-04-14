@@ -4,7 +4,7 @@ ruby "3.3.10"
 
 gem "rails", "~> 7.0.10"
 gem "pg", "~> 1.5"
-gem "puma", "~> 6.0.0"
+gem "puma", "~> 8.0.0"
 gem "bootsnap", require: false
 gem "importmap-rails"
 gem "turbo-rails"
